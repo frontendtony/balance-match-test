@@ -1,23 +1,37 @@
 import logo from 'assets/images/logo.png';
-import { PropsWithChildren } from 'react';
+import { PropsWithChildren, useRef, useState } from 'react';
 import styles from './index.module.css';
 
 export default function AppLayout(props: PropsWithChildren<{}>) {
+  const [isMenuVisible, setMenuVisibility] = useState(false);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const overlayRef = useRef<HTMLButtonElement>(null);
+
   return (
     <div className={`${styles.appLayout}`}>
       <div className={`${styles.header}`}>
-        <svg
-          width="31"
-          height="27"
-          viewBox="0 0 31 27"
-          fill="currentColor"
-          xmlns="http://www.w3.org/2000/svg"
-          className="text-brand"
+        <button
+          ref={menuButtonRef}
+          onClick={() => {
+            setMenuVisibility(true);
+            overlayRef.current?.focus();
+          }}
+          className="md:hidden"
         >
-          <path d="M0 1.92857C0 1.41708 0.203189 0.926543 0.564866 0.564866C0.926543 0.203189 1.41708 0 1.92857 0H28.9286C29.4401 0 29.9306 0.203189 30.2923 0.564866C30.654 0.926543 30.8571 1.41708 30.8571 1.92857C30.8571 2.44006 30.654 2.9306 30.2923 3.29228C29.9306 3.65395 29.4401 3.85714 28.9286 3.85714H1.92857C1.41708 3.85714 0.926543 3.65395 0.564866 3.29228C0.203189 2.9306 0 2.44006 0 1.92857Z" />
-          <path d="M0 25.0716C0 24.5601 0.203189 24.0696 0.564866 23.7079C0.926543 23.3463 1.41708 23.1431 1.92857 23.1431H28.9286C29.4401 23.1431 29.9306 23.3463 30.2923 23.7079C30.654 24.0696 30.8571 24.5601 30.8571 25.0716C30.8571 25.5831 30.654 26.0737 30.2923 26.4353C29.9306 26.797 29.4401 27.0002 28.9286 27.0002H1.92857C1.41708 27.0002 0.926543 26.797 0.564866 26.4353C0.203189 26.0737 0 25.5831 0 25.0716Z" />
-          <path d="M1.92857 11.5713C1.41708 11.5713 0.926543 11.7745 0.564866 12.1362C0.203189 12.4978 0 12.9884 0 13.4999C0 14.0113 0.203189 14.5019 0.564866 14.8636C0.926543 15.2252 1.41708 15.4284 1.92857 15.4284H17.3571C17.8686 15.4284 18.3592 15.2252 18.7208 14.8636C19.0825 14.5019 19.2857 14.0113 19.2857 13.4999C19.2857 12.9884 19.0825 12.4978 18.7208 12.1362C18.3592 11.7745 17.8686 11.5713 17.3571 11.5713H1.92857Z" />
-        </svg>
+          <svg
+            width="31"
+            height="27"
+            viewBox="0 0 31 27"
+            fill="currentColor"
+            xmlns="http://www.w3.org/2000/svg"
+            className="text-brand"
+          >
+            <path d="M0 1.92857C0 1.41708 0.203189 0.926543 0.564866 0.564866C0.926543 0.203189 1.41708 0 1.92857 0H28.9286C29.4401 0 29.9306 0.203189 30.2923 0.564866C30.654 0.926543 30.8571 1.41708 30.8571 1.92857C30.8571 2.44006 30.654 2.9306 30.2923 3.29228C29.9306 3.65395 29.4401 3.85714 28.9286 3.85714H1.92857C1.41708 3.85714 0.926543 3.65395 0.564866 3.29228C0.203189 2.9306 0 2.44006 0 1.92857Z" />
+            <path d="M0 25.0716C0 24.5601 0.203189 24.0696 0.564866 23.7079C0.926543 23.3463 1.41708 23.1431 1.92857 23.1431H28.9286C29.4401 23.1431 29.9306 23.3463 30.2923 23.7079C30.654 24.0696 30.8571 24.5601 30.8571 25.0716C30.8571 25.5831 30.654 26.0737 30.2923 26.4353C29.9306 26.797 29.4401 27.0002 28.9286 27.0002H1.92857C1.41708 27.0002 0.926543 26.797 0.564866 26.4353C0.203189 26.0737 0 25.5831 0 25.0716Z" />
+            <path d="M1.92857 11.5713C1.41708 11.5713 0.926543 11.7745 0.564866 12.1362C0.203189 12.4978 0 12.9884 0 13.4999C0 14.0113 0.203189 14.5019 0.564866 14.8636C0.926543 15.2252 1.41708 15.4284 1.92857 15.4284H17.3571C17.8686 15.4284 18.3592 15.2252 18.7208 14.8636C19.0825 14.5019 19.2857 14.0113 19.2857 13.4999C19.2857 12.9884 19.0825 12.4978 18.7208 12.1362C18.3592 11.7745 17.8686 11.5713 17.3571 11.5713H1.92857Z" />
+          </svg>
+          <span className="sr-only">show navigation menu</span>
+        </button>
         <div className="flex items-center space-x-[0.6875rem]">
           <div className="rounded-[0.3125rem] flex items-center justify-center text-white bg-[#F6CA65] w-[2.6875rem] h-[2.6875rem] text-[1.4375rem] font-bold">
             JD
@@ -25,20 +39,39 @@ export default function AppLayout(props: PropsWithChildren<{}>) {
           <span className="text-brand font-bold">John Doe</span>
         </div>
       </div>
-      <Nav />
+      <Nav isVisible={isMenuVisible} />
       <main className={`${styles.content}`}>{props.children}</main>
       <footer className={`${styles.footer}`}>
         <a href="#" className="text-brand font-bold">
           Terms&Conditions | Privacy policy
         </a>
       </footer>
+      {/* Overlay to close the nav menu */}
+      {isMenuVisible && (
+        <button
+          ref={overlayRef}
+          className="fixed inset-0 opacity-0"
+          role="button"
+          onClick={() => {
+            setMenuVisibility(false);
+            menuButtonRef.current?.focus();
+          }}
+          hidden={!isMenuVisible}
+          data-testid="menu-overlay"
+        >
+          <span className="sr-only">hide navigation menu</span>
+        </button>
+      )}
     </div>
   );
 }
 
-function Nav() {
+function Nav({ isVisible }: { isVisible: boolean }) {
   return (
-    <nav className={`${styles.nav}`}>
+    <nav
+      data-testid="nav-menu"
+      className={`${styles.nav} ${isVisible ? styles.menuVisible + ' visible' : ''}`}
+    >
       <div className={`${styles.logo}`}>
         <img src={logo} alt="balance logo" height={39.98} width={26.67} />
       </div>

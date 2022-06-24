@@ -3,7 +3,7 @@
   overflow-y: auto;
   display: grid;
   grid-template-rows: 5rem 1fr auto;
-  grid-template-columns: 6.25rem 1fr;
+  grid-template-columns: auto 1fr;
   grid-template-areas:
     'nav header'
     'nav content'
@@ -14,6 +14,7 @@
   grid-area: header;
   border-bottom: 2px solid #f3f6f9;
   display: flex;
+  flex-direction: row-reverse;
   align-items: center;
   justify-content: space-between;
   padding-right: 6.25rem;
@@ -30,11 +31,13 @@
   position: sticky;
   top: 0;
   height: 100vh;
+  width: 6.25rem;
   background-color: #ffffff;
 }
 
 .logo {
   height: 5rem;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -57,4 +60,36 @@
   position: sticky;
   bottom: 0;
   background-color: #ffffff;
+}
+
+@media screen and (max-width: 767px) {
+  .appLayout {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      'header'
+      'content'
+      'footer';
+  }
+  .header,
+  .content {
+    padding-right: 0;
+  }
+  .header {
+    flex-direction: row;
+  }
+  .header,
+  .footer {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+  .nav {
+    transition: transform 0.3s ease-in;
+    transform: translateX(-100%);
+    position: fixed;
+    z-index: 10;
+  }
+  .nav.menuVisible {
+    transition: transform 0.3s ease-out;
+    transform: translateX(0);
+  }
 }
