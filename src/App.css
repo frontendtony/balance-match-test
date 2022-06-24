@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  font-family: 'Roboto', sans-serif;
+}
+
 .App {
   text-align: center;
 }

@@ -1,0 +1,60 @@
+.appLayout {
+  height: 100vh;
+  overflow-y: auto;
+  display: grid;
+  grid-template-rows: 5rem 1fr auto;
+  grid-template-columns: 6.25rem 1fr;
+  grid-template-areas:
+    'nav header'
+    'nav content'
+    'nav footer';
+}
+
+.header {
+  grid-area: header;
+  border-bottom: 2px solid #f3f6f9;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-right: 6.25rem;
+  position: sticky;
+  top: 0;
+  background-color: #ffffff;
+}
+
+.nav {
+  grid-area: nav;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  background-color: #ffffff;
+}
+
+.logo {
+  height: 5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 2px solid #f3f6f9;
+  margin-bottom: 2.5625rem;
+}
+
+.navItem + .navItem {
+  margin-top: 1.5rem;
+}
+
+.content {
+  grid-area: content;
+  padding-right: 6.25rem;
+}
+
+.footer {
+  grid-area: footer;
+  padding: 1.375rem 0;
+  position: sticky;
+  bottom: 0;
+  background-color: #ffffff;
+}
