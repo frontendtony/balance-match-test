@@ -5,6 +5,7 @@ module.exports = {
     extend: {
       colors: {
         brand: '#005B96',
+        'brand-light': '#F1FAFE',
       },
       textColor: {
         dark: '#011F4B',

@@ -1,14 +1,5 @@
 import { useQuery } from 'react-query';
-
-export interface Gateway {
-  gatewayId: string;
-  userIds: string[];
-  type: string;
-  apiKey: string;
-  secondaryApiKey: string;
-  description: string;
-  name: string;
-}
+import { Gateway } from 'types';
 
 export default function useGateways() {
   const query = useQuery('gateways', async () => {
