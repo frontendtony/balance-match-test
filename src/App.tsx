@@ -2,18 +2,17 @@ import noReportsImage from 'assets/images/no-reports.jpg';
 import AppLayout from 'components/layout';
 import DatePicker from 'components/primitives/DatePicker';
 import Select from 'components/primitives/Select';
+import useGateways from 'data/gateways';
+import useProjects from 'data/projects';
 import { useState } from 'react';
 import './index.css';
 
 function App() {
-  const [selectedProject, setSelectedProject] = useState<Record<'value' | 'label', string>>({
-    value: 'all',
-    label: 'All projects',
-  });
-  const [selectedGateway, setSelectedGateway] = useState<Record<'value' | 'label', string>>({
-    value: 'all',
-    label: 'All gateways',
-  });
+  const { data: projects = [] } = useProjects();
+  const { data: gateways = [] } = useGateways();
+
+  const [selectedProject, setSelectedProject] = useState<Record<'value' | 'label', string>>();
+  const [selectedGateway, setSelectedGateway] = useState<Record<'value' | 'label', string>>();
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
 
@@ -26,29 +25,27 @@ function App() {
             <p className="font-bold text-light">Easily generate a report of your transactions</p>
           </div>
           <form
-            id="generate-report-form"
+            data-testid="generate-report-form"
             className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3 lg:gap-[1.4375rem] items-start"
           >
             <Select
               value={selectedProject}
               onChange={setSelectedProject}
-              options={[
-                { value: 'all', label: 'All projects' },
-                { value: '1', label: 'Project 1' },
-                { value: '2', label: 'Project 2' },
-              ]}
+              options={[{ value: 'all', label: 'All projects' }].concat(
+                projects?.map(({ name, projectId }) => ({ value: projectId, label: name }))
+              )}
+              placeholder="Select project"
             />
             <Select
               value={selectedGateway}
               onChange={setSelectedGateway}
-              options={[
-                { value: 'all', label: 'All gateways' },
-                { value: '1', label: 'Gateway 1' },
-                { value: '2', label: 'Gateway 2' },
-              ]}
+              options={[{ value: 'all', label: 'All gateways' }].concat(
+                gateways?.map(({ name, gatewayId }) => ({ value: gatewayId, label: name }))
+              )}
+              placeholder="Select gateway"
             />
-            <DatePicker value={startDate} onChange={setStartDate} />
-            <DatePicker value={endDate} onChange={setEndDate} />
+            <DatePicker value={startDate} onChange={setStartDate} label="Choose a start date" />
+            <DatePicker value={endDate} onChange={setEndDate} label="Choose an end date" />
             <button
               className="bg-brand text-white rounded-[0.3125rem] h-8 col-span-2 md:col-span-1"
               type="submit"
