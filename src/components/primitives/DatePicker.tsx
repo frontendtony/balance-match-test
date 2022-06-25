@@ -1,18 +1,17 @@
-interface DatePickerProps {
+import { InputHTMLAttributes } from 'react';
+
+interface DatePickerProps
+  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'value' | 'onChange'> {
   value: string;
   onChange(value: string): void;
   label: string;
 }
 
 export default function DatePicker(props: DatePickerProps) {
+  const { value, onChange, label, ...inputProps } = props;
+
   return (
-    <label className="relative w-full">
-      <input
-        type="date"
-        value={props.value}
-        onChange={(e) => props.onChange(e.target.value)}
-        className="rounded-[0.3125rem] text-white bg-[#1BC5BD] flex items-center justify-between h-8 px-[0.875rem] w-full appearance-none"
-      />
+    <label className="relative w-full rounded-[0.3125rem] text-white bg-[#1BC5BD]">
       <svg
         width="11"
         height="12"
@@ -27,7 +26,22 @@ export default function DatePicker(props: DatePickerProps) {
           fill="white"
         />
       </svg>
-      <span className="sr-only">{props.label}</span>
+      <span
+        className={`text-white ${
+          props.value ? 'sr-only' : 'absolute left-[0.875rem] top-1/2 -translate-y-1/2'
+        }`}
+      >
+        {props.label}
+      </span>
+      <input
+        type="date"
+        value={props.value}
+        onChange={(e) => props.onChange(e.target.value)}
+        className={`${
+          !props.value ? 'opacity-0' : ''
+        } h-8 px-[0.875rem] w-full appearance-none bg-transparent`}
+        {...inputProps}
+      />
     </label>
   );
 }

@@ -17,8 +17,8 @@ function App() {
 
   const [selectedProject, setSelectedProject] = useState<SelectOption>();
   const [selectedGateway, setSelectedGateway] = useState<SelectOption>();
-  const [startDate, setStartDate] = useState('2021-01-01');
-  const [endDate, setEndDate] = useState('2021-12-31');
+  const [startDate, setStartDate] = useState<string>();
+  const [endDate, setEndDate] = useState<string>();
 
   const [reportsData, setReportsData] = useState<{
     reports: Report[];
@@ -93,8 +93,20 @@ function App() {
               )}
               placeholder="Select gateway"
             />
-            <DatePicker value={startDate} onChange={setStartDate} label="Choose a start date" />
-            <DatePicker value={endDate} onChange={setEndDate} label="Choose an end date" />
+            <DatePicker
+              value={startDate || ''}
+              onChange={setStartDate}
+              label="From date"
+              min="2021-01-01"
+              max="2021-12-31"
+            />
+            <DatePicker
+              value={endDate || ''}
+              onChange={setEndDate}
+              label="To date"
+              min="2021-01-01"
+              max="2021-12-31"
+            />
             <button
               className="bg-brand text-white rounded-[0.3125rem] h-8 col-span-2 md:col-span-1"
               type="submit"
@@ -103,7 +115,18 @@ function App() {
             </button>
           </form>
         </header>
-        {reportsData ? (
+        {isSubmitting ? (
+          <div className="flex-grow text-center flex flex-col items-center justify-center">
+            <p>Generating report...</p>
+          </div>
+        ) : reportError ? (
+          <div className="flex-grow text-center flex flex-col items-center justify-center max-w-lg mx-auto">
+            <p className="font-bold text-[#F24E1E] text-2xl">Something went wrong!</p>
+            <p className="text-light font-bold">
+              We encountered a problem while trying to generate your report. Please try again
+            </p>
+          </div>
+        ) : reportsData ? (
           <div className="space-y-7">
             <div className="mt-7 bg-brand-light rounded-[0.625rem] p-6">
               <p className="text-dark font-bold mb-8">
