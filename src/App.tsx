@@ -67,7 +67,14 @@ function App() {
     }
   };
 
-  const isReportAggregated = reportsData?.gateway.value !== reportsData?.project.value;
+  // only aggregate report when we're not showing subsets of both projects and gateways
+  const shouldAggregateReport = !(
+    reportsData?.gateway.value !== 'all' && reportsData?.project.value !== 'all'
+  );
+  // only show the chart when reporting all projects against a specific gateway, and vice versa
+  const shouldShowChart =
+    shouldAggregateReport &&
+    !(reportsData?.gateway.value === 'all' && reportsData?.project.value === 'all');
 
   return (
     <AppLayout>
@@ -138,7 +145,7 @@ function App() {
                   &nbsp;|&nbsp;
                   <span>{reportsData.gateway?.label || 'All gateways'}</span>
                 </p>
-                {!isReportAggregated ? (
+                {!shouldAggregateReport ? (
                   <ReportTable reports={reportsData.reports} />
                 ) : reportsData.project.value === 'all' ? (
                   Object.values(groupReportsByProject(reportsData.reports, projects)).map(
@@ -174,7 +181,7 @@ function App() {
                   )
                 )}
               </div>
-              {!isReportAggregated && (
+              {!shouldAggregateReport && (
                 <div className="mt-7 bg-brand-light rounded-[0.625rem] p-6">
                   <span className="font-bold text-dark">
                     TOTAL |{' '}
@@ -185,7 +192,7 @@ function App() {
               )}
             </div>
 
-            {isReportAggregated && (
+            {shouldShowChart && (
               <div className="w-full max-h-full sticky top-0">
                 {reportsData.project.value === 'all' ? (
                   <ReportChart
