@@ -50,7 +50,7 @@ export default function AppLayout(props: PropsWithChildren<{}>) {
       {isMenuVisible && (
         <button
           ref={overlayRef}
-          className="fixed inset-0 opacity-0"
+          className="fixed inset-0 bg-brand opacity-10"
           role="button"
           onClick={() => {
             setMenuVisibility(false);

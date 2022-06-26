@@ -67,6 +67,8 @@ function App() {
     }
   };
 
+  const isReportAggregated = reportsData?.gateway.value !== reportsData?.project.value;
+
   return (
     <AppLayout>
       <div className="pb-[2.0625rem] px-5 lg:px-0 flex-grow flex flex-col">
@@ -129,20 +131,20 @@ function App() {
           </div>
         ) : reportsData ? (
           <div className="flex flex-col lg:flex-row space-y-8 lg:space-y-0 lg:space-x-8">
-            <div className="space-y-7 flex-grow w-full overflow-x-auto">
+            <div className="space-y-7 flex-grow w-full">
               <div className="bg-brand-light rounded-[0.625rem] p-6 max-w-[100vw] whitespace-nowrap overflow-y-hidden overflow-x-auto">
-                <p className="text-dark font-bold mb-8">
+                <p className="text-dark font-bold mb-8 sticky left-0">
                   <span>{reportsData.project?.label || 'All projects'}</span>
                   &nbsp;|&nbsp;
                   <span>{reportsData.gateway?.label || 'All gateways'}</span>
                 </p>
-                {reportsData.gateway.value === 'all' && reportsData.project.value === 'all' ? (
+                {!isReportAggregated ? (
                   <ReportTable reports={reportsData.reports} />
                 ) : reportsData.project.value === 'all' ? (
                   Object.values(groupReportsByProject(reportsData.reports, projects)).map(
                     ({ name, reports: r }) => (
                       <Disclosure key={name}>
-                        <Disclosure.Button className="flex justify-between items-center bg-white rounded-[0.625rem] p-6 w-full mt-[0.3125rem]">
+                        <Disclosure.Button className="flex justify-between items-center bg-white rounded-[0.625rem] p-6 w-full mt-[0.3125rem] sticky left-0">
                           <span className="font-bold text-dark">{name}</span>
                           <span className="font-bold text-dark">
                             TOTAL: {addThousandSeparator(r.reduce((a, c) => a + c.amount, 0))} USD{' '}
@@ -158,7 +160,7 @@ function App() {
                   Object.values(groupReportsByGateway(reportsData.reports, gateways)).map(
                     ({ name, reports: r }) => (
                       <Disclosure key={name}>
-                        <Disclosure.Button className="flex justify-between items-center bg-white rounded-[0.625rem] p-6 w-full mt-[0.3125rem]">
+                        <Disclosure.Button className="flex justify-between items-center bg-white rounded-[0.625rem] p-6 w-full mt-[0.3125rem] sticky left-0">
                           <span className="font-bold text-dark">{name}</span>
                           <span className="font-bold text-dark">
                             TOTAL: {addThousandSeparator(r.reduce((a, c) => a + c.amount, 0))} USD{' '}
@@ -172,15 +174,18 @@ function App() {
                   )
                 )}
               </div>
-              <div className="mt-7 bg-brand-light rounded-[0.625rem] p-6">
-                <span className="font-bold text-dark">
-                  TOTAL |{' '}
-                  {addThousandSeparator(reportsData.reports.reduce((a, c) => c.amount + a, 0))} USD
-                </span>
-              </div>
+              {!isReportAggregated && (
+                <div className="mt-7 bg-brand-light rounded-[0.625rem] p-6">
+                  <span className="font-bold text-dark">
+                    TOTAL |{' '}
+                    {addThousandSeparator(reportsData.reports.reduce((a, c) => c.amount + a, 0))}{' '}
+                    USD
+                  </span>
+                </div>
+              )}
             </div>
 
-            {!(reportsData.gateway.value === 'all' && reportsData.project.value === 'all') && (
+            {isReportAggregated && (
               <div className="w-full max-h-full sticky top-0">
                 {reportsData.project.value === 'all' ? (
                   <ReportChart

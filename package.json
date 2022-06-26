@@ -4,17 +4,16 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "run-p dev:*",
-    "dev:css": "yarn tailwind:watch",
-    "dev:server": "vite",
+    "dev:css": "yarn tailwind -- --watch",
+    "dev:server": "vite --host",
     "build": "run-s build:*",
-    "build:css": "yarn tailwind:build",
-    "dev:test": "cypress open --e2e --browser chrome",
+    "build:css": "yarn tailwind -- --minify",
     "build:app": "tsc && vite build",
     "preview": "vite preview",
     "start": "yarn build && vite preview --port 3000",
-    "tailwind:watch": "npx tailwindcss -i ./src/App.css -o ./src/index.css --watch",
-    "tailwind:build": "npx tailwindcss -i ./src/App.css -o ./src/index.css --minify",
+    "tailwind": "npx tailwindcss -i ./src/App.css -o ./src/index.css",
     "test:e2e": "start-server-and-test start http://localhost:3000 cypress:run",
+    "cypress:open": "cypress open --e2e --browser chrome",
     "cypress:run": "cypress run --browser chrome"
   },
   "dependencies": {

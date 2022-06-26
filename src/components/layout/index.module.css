@@ -20,7 +20,6 @@
   padding-right: 2rem;
   position: sticky;
   top: 0;
-  z-index: 10;
   background-color: #ffffff;
 }
 
@@ -87,13 +86,13 @@
     padding-right: 1.5rem;
   }
   .nav {
-    transition: transform 0.3s ease-in;
+    transition: transform 0.15s ease-in;
     transform: translateX(-100%);
     position: fixed;
     z-index: 10;
   }
   .nav.menuVisible {
-    transition: transform 0.3s ease-out;
+    transition: transform 0.15s ease-out;
     transform: translateX(0);
   }
 }
