@@ -12,8 +12,9 @@ export default function ReportChart(props: ReportChartProps) {
     .fill(0)
     .map(
       (_, idx) =>
+        // this generates a random color with a high enough contrast againt the white label
         `hsl(${
-          Math.floor(Math.random() * (idx * 30 - (idx + 1) * 30 + 1)) + (idx + 1) * 30
+          Math.floor(Math.random() * (idx * 180 - (idx + 1) * 180 + 1)) + (idx + 1) * 180
         }, 100%, 30%)`
     );
 
