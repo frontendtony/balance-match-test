@@ -2,6 +2,7 @@ import { Disclosure } from '@headlessui/react';
 import noReportsImage from 'assets/images/no-reports.jpg';
 import AppLayout from 'components/layout';
 import DatePicker from 'components/primitives/DatePicker';
+import ReportChart from 'components/primitives/ReportChart';
 import ReportTable from 'components/primitives/ReportTable';
 import Select from 'components/primitives/Select';
 import useGateways from 'data/gateways';
@@ -58,7 +59,9 @@ function App() {
         gateway: selectedGateway ?? { value: 'all', label: 'All gateways' },
       });
     } catch (e: any) {
-      setReportError(e.message);
+      setReportError(
+        'We encountered a problem while trying to generate your report. Please try again'
+      );
     } finally {
       setSubmitting(false);
     }
@@ -66,8 +69,8 @@ function App() {
 
   return (
     <AppLayout>
-      <div className="py-[2.0625rem] px-5 lg:px-0 flex-grow flex flex-col">
-        <header className="lg:flex lg:space-x-8 space-y-4 lg:space-y-0 justify-between">
+      <div className="pb-[2.0625rem] px-5 lg:px-0 flex-grow flex flex-col">
+        <header className="lg:flex lg:space-x-8 space-y-4 lg:space-y-0 justify-between sticky top-0 py-7 bg-white z-10">
           <div>
             <h1 className="text-2xl text-dark font-bold">Reports</h1>
             <p className="font-bold text-light">Easily generate a report of your transactions</p>
@@ -122,60 +125,82 @@ function App() {
         ) : reportError ? (
           <div className="flex-grow text-center flex flex-col items-center justify-center max-w-lg mx-auto">
             <p className="font-bold text-[#F24E1E] text-2xl">Something went wrong!</p>
-            <p className="text-light font-bold">
-              We encountered a problem while trying to generate your report. Please try again
-            </p>
+            <p className="text-light font-bold">{reportError}</p>
           </div>
         ) : reportsData ? (
-          <div className="space-y-7">
-            <div className="mt-7 bg-brand-light rounded-[0.625rem] p-6">
-              <p className="text-dark font-bold mb-8">
-                <span>{reportsData.project?.label || 'All projects'}</span>
-                &nbsp;|&nbsp;
-                <span>{reportsData.gateway?.label || 'All gateways'}</span>
-              </p>
-              {reportsData.gateway.value === 'all' && reportsData.project.value === 'all' ? (
-                <ReportTable reports={reportsData.reports} />
-              ) : reportsData.project.value === 'all' ? (
-                Object.values(groupReportsByProject(reportsData.reports, projects)).map(
-                  ({ name, reports: r }) => (
-                    <Disclosure key={name}>
-                      <Disclosure.Button className="flex justify-between items-center bg-white rounded-[0.625rem] p-6 w-full mt-[0.3125rem]">
-                        <span className="font-bold text-dark">{name}</span>
-                        <span className="font-bold text-dark">
-                          TOTAL: {addThousandSeparator(r.reduce((a, c) => a + c.amount, 0))} USD{' '}
-                        </span>
-                      </Disclosure.Button>
-                      <Disclosure.Panel className="mt-[0.875rem] pl-3">
-                        <ReportTable reports={r} />
-                      </Disclosure.Panel>
-                    </Disclosure>
+          <div className="flex flex-col lg:flex-row space-y-8 lg:space-y-0 lg:space-x-8">
+            <div className="space-y-7 flex-grow w-full overflow-x-auto">
+              <div className="bg-brand-light rounded-[0.625rem] p-6 max-w-[100vw] whitespace-nowrap overflow-y-hidden overflow-x-auto">
+                <p className="text-dark font-bold mb-8">
+                  <span>{reportsData.project?.label || 'All projects'}</span>
+                  &nbsp;|&nbsp;
+                  <span>{reportsData.gateway?.label || 'All gateways'}</span>
+                </p>
+                {reportsData.gateway.value === 'all' && reportsData.project.value === 'all' ? (
+                  <ReportTable reports={reportsData.reports} />
+                ) : reportsData.project.value === 'all' ? (
+                  Object.values(groupReportsByProject(reportsData.reports, projects)).map(
+                    ({ name, reports: r }) => (
+                      <Disclosure key={name}>
+                        <Disclosure.Button className="flex justify-between items-center bg-white rounded-[0.625rem] p-6 w-full mt-[0.3125rem]">
+                          <span className="font-bold text-dark">{name}</span>
+                          <span className="font-bold text-dark">
+                            TOTAL: {addThousandSeparator(r.reduce((a, c) => a + c.amount, 0))} USD{' '}
+                          </span>
+                        </Disclosure.Button>
+                        <Disclosure.Panel className="mt-[0.875rem] lg:pl-3">
+                          <ReportTable reports={r} />
+                        </Disclosure.Panel>
+                      </Disclosure>
+                    )
                   )
-                )
-              ) : (
-                Object.values(groupReportsByGateway(reportsData.reports, gateways)).map(
-                  ({ name, reports: r }) => (
-                    <Disclosure key={name}>
-                      <Disclosure.Button className="flex justify-between items-center bg-white rounded-[0.625rem] p-6 w-full mt-[0.3125rem]">
-                        <span className="font-bold text-dark">{name}</span>
-                        <span className="font-bold text-dark">
-                          TOTAL: {addThousandSeparator(r.reduce((a, c) => a + c.amount, 0))} USD{' '}
-                        </span>
-                      </Disclosure.Button>
-                      <Disclosure.Panel className="mt-[0.875rem] pl-3">
-                        <ReportTable reports={r} />
-                      </Disclosure.Panel>
-                    </Disclosure>
+                ) : (
+                  Object.values(groupReportsByGateway(reportsData.reports, gateways)).map(
+                    ({ name, reports: r }) => (
+                      <Disclosure key={name}>
+                        <Disclosure.Button className="flex justify-between items-center bg-white rounded-[0.625rem] p-6 w-full mt-[0.3125rem]">
+                          <span className="font-bold text-dark">{name}</span>
+                          <span className="font-bold text-dark">
+                            TOTAL: {addThousandSeparator(r.reduce((a, c) => a + c.amount, 0))} USD{' '}
+                          </span>
+                        </Disclosure.Button>
+                        <Disclosure.Panel className="mt-[0.875rem] lg:pl-3">
+                          <ReportTable reports={r} />
+                        </Disclosure.Panel>
+                      </Disclosure>
+                    )
                   )
-                )
-              )}
+                )}
+              </div>
+              <div className="mt-7 bg-brand-light rounded-[0.625rem] p-6">
+                <span className="font-bold text-dark">
+                  TOTAL |{' '}
+                  {addThousandSeparator(reportsData.reports.reduce((a, c) => c.amount + a, 0))} USD
+                </span>
+              </div>
             </div>
-            <div className="mt-7 bg-brand-light rounded-[0.625rem] p-6">
-              <span className="font-bold text-dark">
-                TOTAL |{' '}
-                {addThousandSeparator(reportsData.reports.reduce((a, c) => c.amount + a, 0))} USD
-              </span>
-            </div>
+
+            {!(reportsData.gateway.value === 'all' && reportsData.project.value === 'all') && (
+              <div className="w-full max-h-full sticky top-0">
+                {reportsData.project.value === 'all' ? (
+                  <ReportChart
+                    series={groupReportsByProject(reportsData.reports, projects).map((r) => ({
+                      amount: r.totalAmount,
+                      name: r.name,
+                    }))}
+                    label="GATEWAY"
+                  />
+                ) : (
+                  <ReportChart
+                    series={groupReportsByGateway(reportsData.reports, gateways).map((r) => ({
+                      amount: r.totalAmount,
+                      name: r.name,
+                    }))}
+                    label="PROJECT"
+                  />
+                )}
+              </div>
+            )}
           </div>
         ) : (
           <div className="flex-grow text-center flex flex-col items-center justify-center max-w-lg mx-auto">
