@@ -70,7 +70,7 @@ function App() {
   return (
     <AppLayout>
       <div className="pb-[2.0625rem] px-5 lg:px-0 flex-grow flex flex-col">
-        <header className="lg:flex lg:space-x-8 space-y-4 lg:space-y-0 justify-between sticky top-0 py-7 bg-white z-10">
+        <header className="lg:flex lg:space-x-8 space-y-4 lg:space-y-0 justify-between lg:sticky top-0 py-7 bg-white lg:z-10">
           <div>
             <h1 className="text-2xl text-dark font-bold">Reports</h1>
             <p className="font-bold text-light">Easily generate a report of your transactions</p>
