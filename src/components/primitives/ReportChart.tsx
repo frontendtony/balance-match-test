@@ -70,7 +70,7 @@ export default function ReportChart(props: ReportChartProps) {
       />
       <div className="bg-brand-light rounded-[0.625rem] p-6">
         <span className="font-bold text-dark">
-          {props.label} TOTAL |{' '}
+          {props.label} TOTAL:{' '}
           {addThousandSeparator(props.series.reduce((a, c) => c.amount + a, 0))} USD
         </span>
       </div>

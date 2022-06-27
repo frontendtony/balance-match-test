@@ -43,10 +43,8 @@ function App() {
         body: JSON.stringify({
           from: startDate,
           to: endDate,
-          ...(selectedProject &&
-            selectedProject.value !== 'all' && { projectId: selectedProject.value }),
-          ...(selectedGateway &&
-            selectedGateway.value !== 'all' && { gatewayId: selectedGateway.value }),
+          ...(selectedProject?.value !== 'all' && { projectId: selectedProject?.value }),
+          ...(selectedGateway?.value !== 'all' && { gatewayId: selectedGateway?.value }),
         }),
       });
       const { data, error }: ApiResponse<Report[]> = await reponse.json();
@@ -156,7 +154,7 @@ function App() {
                 {!shouldAggregateReport ? (
                   <ReportTable reports={reportsData.reports} />
                 ) : reportsData.project.value === 'all' ? (
-                  Object.values(groupReportsByProject(reportsData.reports, projects)).map(
+                  groupReportsByProject(reportsData.reports, projects, gateways).map(
                     ({ name, reports: r }) => (
                       <Disclosure key={name}>
                         <Disclosure.Button className="flex justify-between items-center bg-white rounded-[0.625rem] p-6 w-full mt-[0.3125rem] sticky left-0">
@@ -172,7 +170,7 @@ function App() {
                     )
                   )
                 ) : (
-                  Object.values(groupReportsByGateway(reportsData.reports, gateways)).map(
+                  groupReportsByGateway(reportsData.reports, gateways).map(
                     ({ name, reports: r }) => (
                       <Disclosure key={name}>
                         <Disclosure.Button className="flex justify-between items-center bg-white rounded-[0.625rem] p-6 w-full mt-[0.3125rem] sticky left-0">
@@ -189,10 +187,10 @@ function App() {
                   )
                 )}
               </div>
-              {!shouldAggregateReport && (
+              {!shouldShowChart && (
                 <div className="mt-7 bg-brand-light rounded-[0.625rem] p-6">
                   <span className="font-bold text-dark">
-                    TOTAL |{' '}
+                    TOTAL:{' '}
                     {addThousandSeparator(reportsData.reports.reduce((a, c) => c.amount + a, 0))}{' '}
                     USD
                   </span>
@@ -204,10 +202,12 @@ function App() {
               <div className="w-full max-h-full sticky top-0" data-testid="chart-wrapper">
                 {reportsData.project.value === 'all' ? (
                   <ReportChart
-                    series={groupReportsByProject(reportsData.reports, projects).map((r) => ({
-                      amount: r.totalAmount,
-                      name: r.name,
-                    }))}
+                    series={groupReportsByProject(reportsData.reports, projects, gateways).map(
+                      (r) => ({
+                        amount: r.totalAmount,
+                        name: r.name,
+                      })
+                    )}
                     label="GATEWAY"
                   />
                 ) : (

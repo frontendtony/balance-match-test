@@ -1,13 +1,21 @@
 import { Gateway, Project, Report } from 'types';
 
-export function groupReportsByProject(reports: Report[], projects: Project[]) {
-  const projectToReportsMap: Record<string, Project & { reports: Report[]; totalAmount: number }> =
-    projects.reduce((a, c) => ({ ...a, [c.projectId]: { ...c, reports: [], totalAmount: 0 } }), {
-      [projects[0].projectId]: { ...projects[0], reports: [], totalAmount: 0 },
-    });
+export function groupReportsByProject(reports: Report[], projects: Project[], gateways: Gateway[]) {
+  const projectToReportsMap: Record<
+    string,
+    Project & { reports: (Report & { gateway: string })[]; totalAmount: number }
+  > = projects.reduce((a, c) => ({ ...a, [c.projectId]: { ...c, reports: [], totalAmount: 0 } }), {
+    [projects[0].projectId]: { ...projects[0], reports: [], totalAmount: 0 },
+  });
 
+  const gatewaysToObject = gateways.reduce((a, c) => ({ ...a, [c.gatewayId]: c }), {
+    [gateways[0].gatewayId]: gateways[0],
+  });
   reports.forEach((r) => {
-    projectToReportsMap[r.projectId]?.reports.push(r);
+    projectToReportsMap[r.projectId]?.reports.push({
+      ...r,
+      gateway: gatewaysToObject[r.gatewayId].name,
+    });
     projectToReportsMap[r.projectId].totalAmount += r.amount;
   });
 
