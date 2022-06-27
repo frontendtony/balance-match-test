@@ -111,6 +111,7 @@ function App() {
               label="From date"
               min="2021-01-01"
               max="2021-12-31"
+              data-testid="startDate"
             />
             <DatePicker
               value={endDate || ''}
@@ -118,6 +119,7 @@ function App() {
               label="To date"
               min="2021-01-01"
               max="2021-12-31"
+              data-testid="endDate"
             />
             <button
               className="bg-brand text-white rounded-[0.3125rem] h-8 col-span-2 md:col-span-1"
@@ -132,12 +134,18 @@ function App() {
             <p>Generating report...</p>
           </div>
         ) : reportError ? (
-          <div className="flex-grow text-center flex flex-col items-center justify-center max-w-lg mx-auto">
+          <div
+            data-testid="error"
+            className="flex-grow text-center flex flex-col items-center justify-center max-w-lg mx-auto"
+          >
             <p className="font-bold text-[#F24E1E] text-2xl">Something went wrong!</p>
             <p className="text-light font-bold">{reportError}</p>
           </div>
-        ) : reportsData ? (
-          <div className="flex flex-col lg:flex-row space-y-8 lg:space-y-0 lg:space-x-8">
+        ) : reportsData && reportsData?.reports.length > 0 ? (
+          <div
+            data-testid="report"
+            className="flex flex-col lg:flex-row space-y-8 lg:space-y-0 lg:space-x-8"
+          >
             <div className="space-y-7 flex-grow w-full">
               <div className="bg-brand-light rounded-[0.625rem] p-6 max-w-[100vw] whitespace-nowrap overflow-y-hidden overflow-x-auto">
                 <p className="text-dark font-bold mb-8 sticky left-0">
@@ -193,7 +201,7 @@ function App() {
             </div>
 
             {shouldShowChart && (
-              <div className="w-full max-h-full sticky top-0">
+              <div className="w-full max-h-full sticky top-0" data-testid="chart-wrapper">
                 {reportsData.project.value === 'all' ? (
                   <ReportChart
                     series={groupReportsByProject(reportsData.reports, projects).map((r) => ({

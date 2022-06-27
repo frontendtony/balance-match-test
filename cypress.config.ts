@@ -8,5 +8,8 @@ export default defineConfig({
     setupNodeEvents(on, config) {
       // implement node event listeners here
     },
+    env: {
+      apiBaseUrl: 'http://178.63.13.157:8090/mock-api/api',
+    },
   },
 });

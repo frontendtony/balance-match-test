@@ -5,16 +5,15 @@ describe('Mobile layout', () => {
   });
 
   it('hides the navigation menu by default', () => {
-    cy.get('[data-testid="nav-menu"]').should('not.have.class', 'visible');
-    cy.get('[data-testid="nav-menu"]').should('have.css', 'position', 'fixed');
+    cy.get('[data-testid="nav-menu"]').should('not.be.visible');
     cy.get('[data-testid="menu-overlay"]').should('not.exist');
   });
 
   it('opens and closes the navigation menu', () => {
     cy.contains('button', 'show navigation menu').click();
-    cy.get('[data-testid="nav-menu"]').should('have.class', 'visible');
+    cy.get('[data-testid="nav-menu"]').should('be.visible');
     cy.contains('button', 'hide navigation menu').click();
-    cy.get('[data-testid="nav-menu"]').should('not.have.class', 'visible');
+    cy.get('[data-testid="nav-menu"]').should('not.be.visible');
   });
 });
 
